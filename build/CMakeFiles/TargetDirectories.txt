@@ -1,3 +1,0 @@
-C:/Users/bripl/systems/as4/build/CMakeFiles/as4.dir
-C:/Users/bripl/systems/as4/build/CMakeFiles/edit_cache.dir
-C:/Users/bripl/systems/as4/build/CMakeFiles/rebuild_cache.dir
