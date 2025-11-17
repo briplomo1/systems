@@ -26,10 +26,11 @@ int readCourse(FILE *file, int course_num) {
     printf("Scheduled days: %s\n", course.sched);
     printf("Credit hours: %u\n", course.hours);
     printf("Enrolled students: %u\n", course.size);
+	return 0;
     
 }
 
-int createCourse(FILE *file, const COURSE *course, int course_num) {
+int createCourse(FILE *file, const COURSE *course, const int course_num) {
     int course_pos = course_num * sizeof(COURSE);
     COURSE temp = {0};
     fseek(file, course_pos, SEEK_SET);
@@ -40,9 +41,10 @@ int createCourse(FILE *file, const COURSE *course, int course_num) {
     }
     fseek(file, course_pos, SEEK_SET);
     fwrite(course, sizeof(COURSE), 1, file);
+	return 0;
 }
 
-int updateCourse(FILE *file, const COURSE *course, int course_num) {
+int updateCourse(FILE *file, const COURSE *course, const int course_num) {
     COURSE old_course;
     COURSE new_course = {0};
     int seek_pos = course_num * sizeof(COURSE);
@@ -69,14 +71,15 @@ int updateCourse(FILE *file, const COURSE *course, int course_num) {
 
     fseek(file, seek_pos, SEEK_SET);
     fwrite(&new_course, sizeof(COURSE), 1, file);
+	return 0;
 }
 
-int deleteCourse(FILE *file, int course_num) {
-    COURSE empty_course = {0};
+int deleteCourse(FILE *file, const int course_num) {
+    const COURSE empty_course = {0};
     COURSE temp;
-    int seek_pos = course_num * sizeof(COURSE);
+    const int seek_pos = course_num * sizeof(COURSE);
     fseek(file, seek_pos, SEEK_SET);
-    size_t read = fread(&temp, sizeof(COURSE), 1, file);
+    const size_t read = fread(&temp, sizeof(COURSE), 1, file);
 
     if(read != 1 || memcmp(&temp, &empty_course, sizeof(COURSE)) == 0) {
         printf("ERROR: course does not exist\n");
@@ -84,6 +87,7 @@ int deleteCourse(FILE *file, int course_num) {
     }
     fseek(file, seek_pos, SEEK_SET);
     fwrite(&empty_course, sizeof(COURSE), 1, file);
+	return 0;
 }
 
 int readInt(void* value, const char* format) {
@@ -120,13 +124,13 @@ int main(int argc, char *argv[]) {
     }
     
     int option;
-    char line[20];
-    int d;
+	int d;
 
     printMenu();
 
     while((option = getchar()) != EOF) {
-        FILE *file = fopen(out, "rb+");
+		char line[20];
+		FILE *file = fopen(out, "rb+");
         if (!file) {
             file = fopen(out, "wb+");
             if (!file) {
@@ -136,9 +140,8 @@ int main(int argc, char *argv[]) {
         }
 
         option = toupper(option);
-        while((d = getchar()) != '\n' && d != EOF);
-        int course_num;
-        char buffer[100];
+        while((d = getchar()) != '\n' && d != EOF) {}
+		int course_num;
         COURSE course = {0};
 
         switch(option) {
