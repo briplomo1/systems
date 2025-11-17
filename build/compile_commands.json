@@ -1,0 +1,8 @@
+[
+{
+  "directory": "C:/Users/bripl/systems/as4/build",
+  "command": "C:\\PROGRA~1\\JETBRA~1\\CLION2~1.4\\bin\\mingw\\bin\\gcc.exe   -g -std=gnu11 -o CMakeFiles\\as4.dir\\assign4.c.obj -c C:\\Users\\bripl\\systems\\as4\\assign4.c",
+  "file": "C:/Users/bripl/systems/as4/assign4.c",
+  "output": "CMakeFiles/as4.dir/assign4.c.obj"
+}
+]
