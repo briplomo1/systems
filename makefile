@@ -10,15 +10,17 @@ SRC = assign4.c
 OBJ = $(patsubst %.c,build/%.o,$(SRC))
 
 BUILD_DIR = build
-$(shell mkdir -p $(BUILD_DIR))
 
 all: $(TARGET)
 
 $(TARGET): $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
 
-build/%.o: %.c
+build/%.o: %.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
 clean:
 	rm -rf $(BUILD_DIR)

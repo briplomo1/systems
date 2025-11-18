@@ -11,13 +11,13 @@ typedef struct {
     char padding[20];
 } COURSE;
 
-int readCourse(FILE *file, int course_num) {
-    int seek_pos = course_num * sizeof(COURSE);
+int readCourse(FILE *file, const int course_num) {
+    const int seek_pos = course_num * sizeof(COURSE);
     COURSE course;
-    COURSE empty_course = {0};
+    const COURSE empty_course = {0};
     fseek(file, seek_pos, SEEK_SET);
-    fread(&course, sizeof(COURSE), 1, file);
-    if (memcmp(&course, &empty_course, sizeof(COURSE)) == 0) {
+    const size_t read = fread(&course, sizeof(COURSE), 1, file);
+    if (read != 1 || memcmp(&course, &empty_course, sizeof(COURSE)) == 0) {
         printf("ERROR: course not found\n");
         return 1;
     }
@@ -47,10 +47,10 @@ int createCourse(FILE *file, const COURSE *course, const int course_num) {
 int updateCourse(FILE *file, const COURSE *course, const int course_num) {
     COURSE old_course;
     COURSE new_course = {0};
-    int seek_pos = course_num * sizeof(COURSE);
+    const int seek_pos = course_num * sizeof(COURSE);
     fseek(file, seek_pos, SEEK_SET);
-    fread(&old_course, sizeof(COURSE), 1, file);
-    if (memcmp(&old_course, &new_course, sizeof(COURSE)) == 0) {
+    const size_t read = fread(&old_course, sizeof(COURSE), 1, file);
+    if (read != 1 || memcmp(&old_course, &new_course, sizeof(COURSE)) == 0) {
         printf("ERROR: course not found\n");
         return 1;
     }
@@ -98,12 +98,10 @@ int readInt(void* value, const char* format) {
             return 1;
         }
         if(sscanf(buffer, format, value) != 1) {
-            printf("ERROR: invalid input\n");
             return 1;
         }
         return 0;
     }
-    printf("ERROR: invalid input\n");
     return 1;
 }
 
@@ -146,37 +144,37 @@ int main(int argc, char *argv[]) {
 
         switch(option) {
             case 'C':
-                printf("Enter course number to create: ");
+                printf("Course number: ");
                 readInt(&course_num, "%d");
-                printf("Enter course name: ");
+                printf("Course name: ");
                 fgets(course.name, sizeof(course.name), stdin);
                 course.name[strcspn(course.name, "\n")] = '\0';
-                printf("Enter course schedule: ");
+                printf("Course schedule: ");
                 fgets(line, sizeof(line), stdin);
-                course.sched[strcspn(line, "\n")] = '\0';
+                line[strcspn(line, "\n")] = '\0';
                 strncpy(course.sched, line, sizeof(course.sched) - 1);
                 course.sched[sizeof(course.sched) - 1] = '\0';
-                printf("Enter course size: ");
-                readInt(&(course.size), "%u");
-                printf("Enter course credit hours: ");
+                printf("Course credit hours: ");
                 readInt(&(course.hours), "%u");
+        		printf("Course enrollment: ");
+        		readInt(&(course.size), "%u");
                 createCourse(file, &course, course_num);
                 break;
             case 'U':
-                printf("Enter course number to update: ");
-                readInt(&course_num, "%d");
-                printf("Enter new course name (or leave blank to keep current): ");
-                fgets(course.name, sizeof(course.name), stdin);
-                course.name[strcspn(course.name, "\n")] = '\0';
-                printf("Enter new course schedule (or leave blank to keep current): ");
-                fgets(line, sizeof(line), stdin);
-                course.sched[strcspn(line, "\n")] = '\0';
-                strncpy(course.sched, line, sizeof(course.sched) - 1);
-                course.sched[sizeof(course.sched) - 1] = '\0';
-                printf("Enter new course size (or leave blank to keep current): ");
-                readInt(&course.size, "%u");
-                printf("Enter new course hours (or leave blank to keep current): ");
-                readInt(&course.hours, "%u");
+            	printf("Course number: ");
+        		readInt(&course_num, "%d");
+        		printf("Course name: ");
+        		fgets(course.name, sizeof(course.name), stdin);
+        		course.name[strcspn(course.name, "\n")] = '\0';
+        		printf("Course schedule: ");
+        		fgets(line, sizeof(line), stdin);
+        		line[strcspn(line, "\n")] = '\0';
+        		strncpy(course.sched, line, sizeof(course.sched) - 1);
+        		course.sched[sizeof(course.sched) - 1] = '\0';
+        		printf("Course credit hours: ");
+        		readInt(&(course.hours), "%u");
+        		printf("Course enrollment: ");
+        		readInt(&(course.size), "%u");
                 updateCourse(file, &course, course_num);
                 break;
             case 'R':
