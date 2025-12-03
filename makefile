@@ -3,9 +3,9 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -std=c11 -g
 
-TARGET = build/assign4
+TARGET = build/assign5
 
-SRC = assign4.c
+SRC = assign5.c
 
 OBJ = $(patsubst %.c,build/%.o,$(SRC))
 

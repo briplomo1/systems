@@ -5,12 +5,11 @@
 #include <sys/wait.h>
 
 int main() {
-    pid_t pid;
-    pid_t children[5];
+	pid_t children[5];
     int i;
 
-    for (i = 1; i <= 5; i++) {
-        pid = fork();
+    for (i = 0; i < 5; i++) {
+        const pid_t pid = fork();
 
         if (pid < 0) {
             perror("ERROR: fork failed");
@@ -18,26 +17,18 @@ int main() {
         }
 
         if (pid == 0) {
-            printf("Child PID: %d, Parent PID: %d, Child num: %d\n", getpid(), getppid(), i);
+            printf("Child Process %d, PID: %d, PPID: %d\n", i+1, getpid(), getppid());
             fflush(stdout);
             sleep(1);
             exit(0);
         }
-
         children[i] = pid;
     }
 
-    for (i = 1; i <= 5; i++) {
+    for (i = 0; i < 5; i++) {
         int status;
-        pid_t pid = waitpid(children[i], &status, 0);
-        if (wpid == -1) {
-            perror("ERROR: Wait failed");
-        } else {
-            printf("Parent: child %d (PID=%d) finished.\n", i + 1, wpid);
-        }
+        waitpid(children[i], &status, 0);
     }
-
-    printf("Parent %d: all children finished.\n", getpid());
 
     return 0;
 }
